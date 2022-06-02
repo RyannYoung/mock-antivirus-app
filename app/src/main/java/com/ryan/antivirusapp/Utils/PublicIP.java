@@ -1,35 +1,47 @@
 package com.ryan.antivirusapp.Utils;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-import com.ryan.antivirusapp.MainActivity;
+public class PublicIP {
 
-public class PublicIP extends AsyncTask<String, String, String> {
+    // TaskRunner
+    private final Executor executor;
+    private final Handler handler;
 
     public String publicIp;
 
-    @Override
-    protected String doInBackground(String... strings) {
-        String publicIP = "";
-        try  {
-            java.util.Scanner s = new java.util.Scanner(
-                    new java.net.URL(
-                            "https://api.ipify.org")
-                            .openStream(), "UTF-8")
-                    .useDelimiter("\\A");
-            publicIP = s.next();
-            System.out.println("My current IP address is " + publicIP);
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
-        return publicIP;
+    public PublicIP(){
+        executor = Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper());
+
+        execute();
     }
 
-    @Override
-    protected void onPostExecute(String publicIp) {
-        super.onPostExecute(publicIp);
-        this.publicIp = publicIp;
+    // Make a call externally an asynchronously read the input
+    void execute(){
+        executor.execute(() ->{
+            String publicIP = "";
+            try  {
+                java.util.Scanner s = new java.util.Scanner(
+                        new java.net.URL(
+                                "https://api.ipify.org")
+                                .openStream(), "UTF-8")
+                        .useDelimiter("\\A");
+                publicIP = s.next();
+                System.out.println("My current IP address is " + publicIP);
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+
+            String finalPublicIP = publicIP;
+            handler.post(()->{
+                publicIp = finalPublicIP;
+            });
+        });
     }
 
     public boolean hasResult(){

@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Init external IP
         ip = new PublicIP();
-        ip.execute();
 
         // Init permissions
         handler = new PermissionHandler();
@@ -45,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // Direct to prompting missing permissions
         handler.promptPermissions(this, deniedPermissions, getString(R.string.permission_prompt_title), getString(R.string.permission_prompt_message));
 
+        // Scan button ON-CLICK
         btnScan.setOnClickListener(view -> {
             if(!ip.hasResult()) return;
             handler.checkSpecialPermission(this, MANAGE_EXTERNAL_STORAGE);
