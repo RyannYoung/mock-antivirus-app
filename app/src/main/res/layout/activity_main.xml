@@ -21,7 +21,8 @@
             app:navigationIcon="@drawable/ic_baseline_menu_24"
             app:menu="@menu/top_app_bar"
             app:titleTextAppearance="@style/main_toolbar"
-            app:title="Antivirus Scanner" />
+            app:title="Antivirus Scanner"
+            android:focusable="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -49,8 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="50%"
-            android:textSize="26dp" />
+            android:text="@string/progress_text"
+            android:textSize="26sp" />
     </FrameLayout>
 
     <LinearLayout
@@ -240,13 +241,6 @@
                     android:minLines="2"
                     android:text="Scan nearby connections"
                     android:textAlignment="center" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="64px"
-                    android:src="@drawable/ic_baseline_check_circle_24"
-                    app:tint="@color/purple_500"
-                    />
 
 
             </LinearLayout>

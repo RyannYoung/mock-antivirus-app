@@ -5,9 +5,9 @@ import android.util.Log;
 
 import com.ryan.antivirusapp.MainActivity;
 
-public class GetPublicIP extends AsyncTask<String, String, String> {
+public class PublicIP extends AsyncTask<String, String, String> {
 
-    public String ip;
+    public String publicIp;
 
     @Override
     protected String doInBackground(String... strings) {
@@ -23,18 +23,16 @@ public class GetPublicIP extends AsyncTask<String, String, String> {
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
-
         return publicIP;
     }
 
     @Override
     protected void onPostExecute(String publicIp) {
         super.onPostExecute(publicIp);
+        this.publicIp = publicIp;
+    }
 
-        Log.e("PublicIP", publicIp+"");
-
-        ip = publicIp;
-
-        MainActivity.UpdateText(publicIp);
+    public boolean hasResult(){
+        return publicIp != null;
     }
 }

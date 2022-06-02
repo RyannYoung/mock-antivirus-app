@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AntiVirus App</string>
+    <string name="permission_prompt_title">Permissions Required</string>
+    <string name="permission_prompt_message">Please accept the following permissions to allow the app to function</string>
+    <string name="prompt_special_title">Special Permission Required</string>
+    <string name="prompt_special_message">This app requires the following special app permission</string>
+    <string name="prompt_positive_message">This app requires FULL storage access</string>
+    <string name="prompt_positive_text">Accept</string>
+    <string name="prompt_neutral_text">Cancel</string>
+    <string name="progress_text">50%</string>
 </resources>
