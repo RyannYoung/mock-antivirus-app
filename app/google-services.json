@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1058751811590",
+    "firebase_url": "https://device-enumeration-default-rtdb.firebaseio.com",
+    "project_id": "device-enumeration",
+    "storage_bucket": "device-enumeration.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058751811590:android:4326ff740b3ef80d707387",
+        "android_client_info": {
+          "package_name": "com.ryan.antivirusapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058751811590-5l9tnosjrm1set3j1lflbrr5sntmsu5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA5pxEi41rEFCfQkNGEVn4f1j1uueMO5w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058751811590-5l9tnosjrm1set3j1lflbrr5sntmsu5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058751811590:android:4ab28b16f80792f8707387",
+        "android_client_info": {
+          "package_name": "com.ryan.flask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058751811590-5l9tnosjrm1set3j1lflbrr5sntmsu5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA5pxEi41rEFCfQkNGEVn4f1j1uueMO5w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058751811590-5l9tnosjrm1set3j1lflbrr5sntmsu5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
