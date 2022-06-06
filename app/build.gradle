@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+    def dynamicanimation_version = '1.0.0'
+    implementation "androidx.dynamicanimation:dynamicanimation:$dynamicanimation_version"
     implementation platform('com.google.firebase:firebase-bom:30.0.2')
     implementation 'com.google.firebase:firebase-database'
     implementation 'androidx.appcompat:appcompat:1.4.1'

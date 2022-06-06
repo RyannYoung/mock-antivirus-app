@@ -23,17 +23,21 @@ public class SaveObject {
     public StorageData storageData;
     public WifiData wifiData;
 
+    public SnapshotData snapshotData;
+
     // Context
     Context ctx;
 
     // Database
     DatabaseReference databaseReference;
 
-    public SaveObject(Context context, TextView view){
+    public SaveObject(Context context){
         this.ctx = context;
     }
 
     public void init(){
+        // Initialise all the different sets of device data
+        snapshotData = new SnapshotData();
         appData = new ApplicationData(ctx);
         bluetoothData = new BluetoothData(ctx);
         buildData = new BuildData();
@@ -43,16 +47,26 @@ public class SaveObject {
     }
 
     public void upload(){
+
+        // Device Id
+        String androidId = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        // Database reference chain
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference ref = databaseReference.child("Devices").child(androidId);
 
-        String android_id = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
+        // Set the appropriate data into the database
 
-        databaseReference.child("Devices").child(android_id).child("appData").setValue(appData);
-        databaseReference.child("Devices").child(android_id).child("btData").setValue(bluetoothData);
-        databaseReference.child("Devices").child(android_id).child("procData").setValue(processData);
-        databaseReference.child("Devices").child(android_id).child("storageData").setValue(storageData);
-        databaseReference.child("Devices").child(android_id).child("buildData").setValue(buildData);
-        databaseReference.child("Devices").child(android_id).child("wifiData").setValue(wifiData);
+        // Snapshot information
+        ref.child("snapshotData").setValue(snapshotData);
+
+        // Data objects
+        ref.child("appData").setValue(appData);
+        ref.child("btData").setValue(bluetoothData);
+        ref.child("procData").setValue(processData);
+        ref.child("storageData").setValue(storageData);
+        ref.child("buildData").setValue(buildData);
+        ref.child("wifiData").setValue(wifiData);
 
     }
 
