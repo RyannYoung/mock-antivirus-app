@@ -31,38 +31,38 @@
         android:id="@+id/layout_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         app:layout_constraintBottom_toTopOf="@id/layout_linear_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar">
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/circle_drawable"/>
+            android:padding="16dp"
+            android:src="@drawable/circle_drawable" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_circular"
-            android:padding="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="8dp"
             android:indeterminate="true"
-            app:indicatorSize="128dp"
-            app:trackCornerRadius="16dp"
             app:indicatorColor="@color/orange"
+            app:indicatorSize="96dp"
             app:trackColor="@color/blue_light_faded"
+            app:trackCornerRadius="16dp"
             app:trackThickness="8dp" />
 
         <ImageView
             android:id="@+id/image_shield"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="32dp"
             android:src="@drawable/ic_baseline_security_24"
-            android:padding="48dp"
-            app:tint="@color/white"/>
+            app:tint="@color/white" />
     </FrameLayout>
 
     <LinearLayout
@@ -76,7 +76,7 @@
         app:layout_constraintTop_toBottomOf="@id/layout_frame">
 
         <TextView
-            android:layout_marginVertical="8dp"
+            android:layout_marginVertical="4dp"
             android:id="@+id/text_device_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,30 +127,31 @@
         android:id="@+id/layout_linear_row_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="16dp"
-        android:paddingVertical="8dp"
-        android:gravity="center"
         android:clipToPadding="false"
+        android:gravity="center"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/linear_row_bottom"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider_mid"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@id/divider_mid">
 
 
         <!-- Clean Device Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_clean_device"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="128dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            app:cardElevation="4dp"
             android:clickable="true"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="16dp"
+            android:focusable="true"
+            app:cardElevation="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toLeftOf="@id/card_scan_wifi"
 
+            app:layout_constraintTop_toTopOf="parent"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -162,45 +163,44 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:layout_weight="1">
 
                     <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:src="@drawable/circle_drawable" />
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center"
                         android:padding="4dp"
-                        app:tint="@color/white"
-                        android:src="@drawable/ic_baseline_cleaning_services_24" />
+                        android:src="@drawable/ic_baseline_cleaning_services_24"
+                        app:tint="@color/white" />
                 </FrameLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Clean Device"
-                    android:textColor="@color/blue_light"
                     android:textAlignment="center"
+                    android:textColor="@color/blue_light"
                     android:textStyle="bold" />
 
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
-                    android:text="Remove unwanted files"
                     android:minLines="2"
-                    android:textAlignment="center" />
+                    android:text="Remove unwanted files"
+                    android:textAlignment="center"
+                    android:textSize="10dp" />
 
             </LinearLayout>
-
 
 
         </com.google.android.material.card.MaterialCardView>
@@ -209,16 +209,18 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_scan_wifi"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_height="128dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="8dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardElevation="4dp"
             app:layout_constraintLeft_toRightOf="@id/card_clean_device"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:strokeWidth="0dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -228,43 +230,43 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:layout_weight="1">
 
                     <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:src="@drawable/circle_drawable" />
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center"
                         android:padding="4dp"
-                        app:tint="@color/white"
-                        android:src="@drawable/ic_baseline_wifi_24" />
+                        android:src="@drawable/ic_baseline_wifi_24"
+                        app:tint="@color/white" />
                 </FrameLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Scan WiFi"
-                    android:textColor="@color/blue_light"
                     android:textAlignment="center"
+                    android:textColor="@color/blue_light"
                     android:textStyle="bold" />
 
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:maxWidth="128dp"
                     android:layout_height="wrap_content"
-                    android:textSize="10dp"
+                    android:maxWidth="128dp"
                     android:minLines="2"
                     android:text="Scan nearby connections"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="10dp" />
 
 
             </LinearLayout>
@@ -273,32 +275,33 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear_row_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:clipToPadding="false"
         android:paddingBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linear_bottom_app"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_linear_row_1"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@id/layout_linear_row_1">
 
         <!-- Check Permissions Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_check_permissions"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="16dp"
             android:clickable="true"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:clipToPadding="false"
             app:cardElevation="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/card_automatic_scan"
             app:layout_constraintTop_toBottomOf="@id/card_clean_device"
-            app:strokeWidth="0dp">
+            app:strokeWidth="0dp"
+            android:focusable="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -315,14 +318,14 @@
                     android:layout_weight="1">
 
                     <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:src="@drawable/circle_drawable" />
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center"
                         android:padding="4dp"
                         android:src="@drawable/ic_baseline_security_24"
@@ -353,16 +356,17 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_automatic_scan"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:clickable="true"
             app:cardElevation="4dp"
             app:layout_constraintLeft_toRightOf="@id/card_check_permissions"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_scan_wifi"
-            app:strokeWidth="0dp">
+            app:strokeWidth="0dp"
+            android:focusable="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -373,20 +377,20 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:layout_weight="1">
 
                     <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:src="@drawable/circle_drawable" />
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:layout_gravity="center"
                         android:padding="4dp"
                         android:src="@drawable/ic_baseline_autorenew_24"
@@ -415,5 +419,17 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linear_bottom_app"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_nav_bar" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

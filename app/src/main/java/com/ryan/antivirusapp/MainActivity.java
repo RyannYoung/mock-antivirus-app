@@ -10,6 +10,8 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     // Save Objects
     SaveObject saveObject;
 
+    // Vibration
+    Vibrator vibrator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress_circular);
         txtCount = findViewById(R.id.text_count);
         txtDate = findViewById(R.id.txtDate);
+
+        // Get the vibration motor
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         // Unique device id
         TextView txtId = findViewById(R.id.text_device_id);
@@ -81,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Scan button ON-CLICK
         btnScan.setOnClickListener(view -> {
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                final VibrationEffect effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK);
+                vibrator.vibrate(effect);
+            }
+
+            // Exit is not available currently
             if(ip.publicIp == null){
                 Snackbar.make(btnScan, "Application is loading. Please wait.", Snackbar.LENGTH_SHORT).show();
                 return;
@@ -128,6 +143,13 @@ public class MainActivity extends AppCompatActivity {
                     CircularProgressIndicator prog = findViewById(R.id.progress_circular);
                     prog.setIndeterminate(false);
                     prog.setProgress(100, true);
+
+                    final VibrationEffect effect;
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        effect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE);
+                        vibrator.vibrate(effect);
+                    }
 
                     // Icon
                     ImageView imgIcon = findViewById(R.id.image_shield);
